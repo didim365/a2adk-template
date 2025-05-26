@@ -1,0 +1,30 @@
+[project]
+name = "a2adk"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+
+dependencies = [
+    "a2a-sdk",
+    "click>=8.1.8",
+    "dotenv>=0.9.9",
+    "httpx>=0.28.1",
+    "google-genai>=1.9.0",
+    "google-adk>=0.0.3",
+    "pydantic>=2.11.4",
+    "python-dotenv>=1.1.0",
+]
+
+[project.scripts]
+a2adk = "a2adk:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+a2a-sdk = { git = "https://github.com/google/a2a-python" }

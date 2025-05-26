@@ -1,0 +1,18 @@
+# Choose Model Backend: 0 -> ML Dev, 1 -> Vertex
+GOOGLE_GENAI_USE_VERTEXAI=1
+
+# ML Dev backend config. Fill if using Ml Dev backend.
+GOOGLE_API_KEY=*******
+
+# Vertex backend config
+GOOGLE_CLOUD_PROJECT=******
+GOOGLE_CLOUD_LOCATION=us-central1
+
+# Models used in Agents
+ROOT_AGENT_MODEL='gemini-2.0-flash'
+
+# Bucket name
+GCS_BUCKET=******
+
+# Frontend
+VITE_A2A_SERVER_URL=http://localhost:9999

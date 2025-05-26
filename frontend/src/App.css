@@ -1,0 +1,46 @@
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  --primary-main: #0B9140;
+  --primary-sub: #78BE20;
+  --primary-bg: #E5F7CE;
+  --secondary-main: #005920;
+  --secondary-sub: #008530;
+  --secondary-accent: #B0E66B;
+  --secondary-blue: #0066B3;
+  --secondary-yellow: #FFC20E;
+  --gray-50: #F4F9FF;
+  --gray-100: #EFEFF1;
+  --gray-200: #E9E9E9;
+  --gray-400: #7F7F7F;
+  --gray-500: #606060;
+  --gray-900: #02081A;
+  --gray-1000: #FFFFFF;
+  --background: #FFFFFF;
+  --foreground: #02081A;
+}
+
+.dark-theme {
+  --primary-main: #0B9140;
+  --primary-sub: #78BE20;
+  --primary-bg: #E5F7CE;
+  --secondary-main: #005920;
+  --secondary-sub: #008530;
+  --secondary-accent: #B0E66B;
+  --secondary-blue: #0066B3;
+  --secondary-yellow: #FFC20E;
+  --gray-50: #F4F9FF;
+  --gray-100: #EFEFF1;
+  --gray-200: #E9E9E9;
+  --gray-400: #7F7F7F;
+  --gray-500: #606060;
+  --gray-900: #02081A;
+  --gray-1000: #FFFFFF;
+  --background: #02081A;
+  --foreground: #FFFFFF;
+} 

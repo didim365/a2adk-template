@@ -1,0 +1,4 @@
+.vscode/
+node_module/
+.DS_Store
+dockerfile
