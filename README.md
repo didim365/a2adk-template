@@ -1,64 +1,77 @@
-## ADK 에이전트
+## ADK Agent
 
-이 샘플은 에이전트 개발 키트(ADK)를 사용하여 A2A 서버로 호스팅되는 간단한 "weather_time_agent" 에이전트를 만듭니다.
+This sample creates a simple "weather_time_agent" agent hosted by an A2A server using the Agent Development Kit (ADK).
 
-## 사전 준비 사항
+## Prerequisites
 
-1. 개발 환경
+1. Development Environment
 - backend
-    - Python 3.13 이상
-    - [UV](https://docs.astral.sh/uv/)
+    - Python 3.13 or higher
+    - [UV](https://docs.astral.sh/uv/) installed
 - frontend
-    - node v22 이상
-    - npm
-2. GCP 계정
-- LLM 액세스 및 Vertex AI 권한이 있는 계정
+    - node v22 or higher
+    - npm installed
+2. GCP Account
+- Account with LLM access and Vertex AI permissions
 ```bash
 gcloud auth application-default login
 ```
+- When deploying to GCP CloudRun, connect using a service account.
 
-## 샘플 설치
-1. 다운로드
+## Sample Installation
+1. Download
 ```bash
 curl -L -o a2adk-template.zip https://github.com/didim365/a2adk-template/archive/main.zip
 unzip a2adk-template.zip
 ```
-2. backend 설치
+2. Backend Installation
 ```bash
 uv sync
 ```
-3. frontend 설치
+3. Frontend Installation
 ```bash
 cd frontend
 npm install
 ```
 
-## 샘플 실행 방법
-1. adk 에이전트를 실행합니다. (A2A 서버를 사용하지 않는다.)
+## How to Run the Sample
+1. Run the ADK agent. (Does not use the A2A server.)
 ```bash
 cd a2adk
 adk run agent
 # or adk web
 ```
-2. A2A 서버를 실행합니다:
+2. Run the A2A server:
 ```bash
 a2adk
 # or a2adk --agent root_agent
 # or a2adk --host localhost --port 10008
 ```
-3. frontend를 실행합니다.
-- 개발 서버를 실행 합니다.
+3. Run the frontend.
+- Start the development server.
 ```bash
 cd frontend
 npm run dev
 ```
-- 웹 브라우저로 http://localhost:5173을 연다
+- Open http://localhost:5173 in your web browser.
 
-### 샘플 Debug 방밥
-vscode의 디버그를 사용한다.
+## How to Debug the Sample
+Use the VSCode debugger.
 1. Debug ADK Agent
-ADK 에이전트를 (./a2adk/agents 아래 코드) debug한다. 
+Debug the ADK agent (code under ./a2adk/agents).
 2. Debug A2A Agent
-A2A 서버를 debug한다.
+Debug the A2A server.
 3. Debug frontend
-A2A web client를 debug한다. (npm run dev 먼저 수행한다.)
+Debug the A2A web client (run `npm run dev` first).
+
+## How to Build Sample Docker Images
+1. Backend
+```bash
+docker buildx build --platform=linux/amd64 -t a2adk-backend .
+```
+2. Frontend
+```bash
+cd frontend
+docker buildx build --platform=linux/amd64 -t a2adk-frontend .
+```
+When deploying, use the values from `.env` as environment variables.
