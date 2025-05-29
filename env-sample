@@ -14,5 +14,10 @@ ROOT_AGENT_MODEL='gemini-2.0-flash'
 # Bucket name
 GCS_BUCKET=******
 
+# ADK Production
+# GCS_ARTIFACT_SERVICE=******
+# DATABASE_SESSION_SERVICE="postgresql://postgres:postgres@localhost:5432/postgres"
+# VERTEXAIRAG_MEMORY_SERVICE=projects/{project}/locations/{location}/ragCorpora/{rag_no}
+
 # Frontend
 VITE_A2A_SERVER_URL=http://localhost:9999

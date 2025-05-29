@@ -57,11 +57,11 @@ npm run dev
 
 ## How to Debug the Sample
 Use the VSCode debugger.
-1. Debug ADK Agent
+1. Debug ADK Agent  
 Debug the ADK agent (code under ./a2adk/agents).
-2. Debug A2A Agent
+2. Debug A2A Agent  
 Debug the A2A server.
-3. Debug frontend
+3. Debug frontend  
 Debug the A2A web client (run `npm run dev` first).
 
 ## How to Build Sample Docker Images

@@ -53,6 +53,9 @@ memory_service=VertexAiRagMemoryService(rag_corpus="...", similarity_top_k=5, ve
 ...
 ```
 
+2. .env 사용  
+.env에 GCS_ARTIFACT_SERVICE, DATABASE_SESSION_SERVICE, VERTEXAIRAG_MEMORY_SERVICE 값을 설정함으로 각각의 환경을 사용한다. (초기값은 InMemoey...() 사용)
+
 ## A2A 환경 구성
 A2A Server의 Task를 장기 수행하기 위해서는 [task_store, queue_manager](https://google.github.io/A2A/sdk/python/#a2a.server.request_handlers.DefaultRequestHandler)를 장기 보관가능한 환경으로 구성합니다. 샘플의 기본 구성은 InMemory...()입니다. 개별 환경에 맞추어 수정합니다.
 ```python

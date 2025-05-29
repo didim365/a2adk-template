@@ -7,6 +7,10 @@ from starlette.middleware.cors import CORSMiddleware
 from urllib.parse import urlparse
 from starlette.datastructures import State
 
+from google.adk.artifacts.gcs_artifact_service import GcsArtifactService
+from google.adk.memory.vertex_ai_rag_memory_service import VertexAiRagMemoryService
+from google.adk.sessions.database_session_service import DatabaseSessionService
+
 from a2a.server.apps import A2AStarletteApplication
 from a2a.server.events import InMemoryQueueManager
 from a2a.server.request_handlers import DefaultRequestHandler
@@ -40,8 +44,25 @@ def main(host: str, port: int, agent: str):
             raise Exception(
                 'GOOGLE_API_KEY environment variable not set and GOOGLE_GENAI_USE_VERTEXAI is not TRUE.'
             )
+    if os.getenv('GCS_ARTIFACT_SERVICE'):
+        artifact_service = GcsArtifactService(bucket_name=os.getenv('GCS_ARTIFACT_SERVICE'))
+    else:
+        artifact_service = None
+    if os.getenv('DATABASE_SESSION_SERVICE'):
+        session_service = DatabaseSessionService(db_url=os.getenv('DATABASE_SESSION_SERVICE'))
+    else:
+        session_service = None
+    if os.getenv('VERTEXAIRAG_MEMORY_SERVICE'):
+        memory_service = VertexAiRagMemoryService(rag_corpus=os.getenv('VERTEXAIRAG_MEMORY_SERVICE'))
+    else:
+        memory_service = None
 
-    agent_executor = ADKAgentExecutor(agent)
+    agent_executor = ADKAgentExecutor(
+        agent_name=agent,
+        artifact_service=artifact_service,
+        session_service=session_service,
+        memory_service=memory_service,
+    )
     agent_card = get_agent_card(host, port)
     request_handler = DefaultRequestHandler(
         agent_executor=agent_executor, 

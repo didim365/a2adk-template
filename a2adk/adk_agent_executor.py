@@ -5,11 +5,12 @@ from pydantic import ConfigDict
 
 from google.adk import Runner
 from google.adk.agents import RunConfig
-from google.adk.artifacts import InMemoryArtifactService
+from google.adk.artifacts import InMemoryArtifactService, BaseArtifactService
 from google.adk.events import Event
-from google.adk.memory.in_memory_memory_service import InMemoryMemoryService
-from google.adk.sessions import InMemorySessionService
+from google.adk.memory.in_memory_memory_service import InMemoryMemoryService, BaseMemoryService
+from google.adk.sessions import InMemorySessionService, BaseSessionService
 from google.adk.tools import ToolContext
+from google.adk.tools.load_memory_tool import LoadMemoryTool
 from google.genai import types
 
 from a2a.server.agent_execution import AgentExecutor, RequestContext
@@ -49,15 +50,28 @@ class A2ARunConfig(RunConfig):
 class ADKAgentExecutor(AgentExecutor):
     """An AgentExecutor that runs an ADK-based Agent."""
 
-    def __init__(self, agent_name):
+    def __init__(self, 
+                 agent_name: str, 
+                 *, 
+                 artifact_service: BaseArtifactService,
+                 session_service: BaseSessionService,
+                 memory_service: BaseMemoryService,
+    ):
         self._agent = get_agent(agent_name)
+        if (memory_service is not None) and (not isinstance(memory_service, InMemoryMemoryService)):
+            if self._agent.tools is None:
+                self._agent.tools = [LoadMemoryTool()]
+            else:
+                if not any(isinstance(tool, LoadMemoryTool) for tool in self._agent.tools):
+                    self._agent.tools.append(LoadMemoryTool())
         self._runner = Runner(
             app_name=self._agent.name,
             agent=self._agent,
-            artifact_service=InMemoryArtifactService(),
-            session_service=InMemorySessionService(),
-            memory_service=InMemoryMemoryService(),
+            artifact_service=artifact_service if artifact_service else InMemoryArtifactService(),
+            session_service=session_service if session_service else InMemorySessionService(),
+            memory_service=memory_service if memory_service else InMemoryMemoryService(),
         )
+        self._save_as_artifacts = (artifact_service is not None) and (not isinstance(artifact_service, InMemoryArtifactService))
 
     def _run_agent(
         self,
@@ -69,7 +83,7 @@ class ADKAgentExecutor(AgentExecutor):
             session_id=session_id,
             user_id='self',
             new_message=new_message,
-            run_config=A2ARunConfig(current_task_updater=task_updater),
+            run_config=A2ARunConfig(current_task_updater=task_updater, save_input_blobs_as_artifacts=self._save_as_artifacts),
         )
 
     def _get_task_updater(self, tool_context: ToolContext):
