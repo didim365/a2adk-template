@@ -3,7 +3,7 @@
 FROM python:3.13-slim-bookworm AS builder
 
 # Git 설치 (uv가 Git 저장소에서 의존성을 가져올 수 있도록)
-RUN apt-get update && apt-get install -y git --no-install-recommends && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y git --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 # uv 바이너리 복사 (ghcr.io/astral-sh/uv 에서 사용 가능한 최신 안정 버전을 확인하세요.)
 # 예시: COPY --from=ghcr.io/astral-sh/uv:0.2.10 /uv /bin/uv (실제 최신 버전으로 변경)

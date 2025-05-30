@@ -7,10 +7,11 @@ from google.adk import Runner
 from google.adk.agents import RunConfig
 from google.adk.artifacts import InMemoryArtifactService, BaseArtifactService
 from google.adk.events import Event
-from google.adk.memory.in_memory_memory_service import InMemoryMemoryService, BaseMemoryService
+from google.adk.memory import InMemoryMemoryService, BaseMemoryService
 from google.adk.sessions import InMemorySessionService, BaseSessionService
 from google.adk.tools import ToolContext
-from google.adk.tools.load_memory_tool import LoadMemoryTool
+from google.adk.tools.load_memory_tool import load_memory_tool, LoadMemoryTool
+from google.adk.tools.preload_memory_tool import preload_memory_tool, PreloadMemoryTool
 from google.genai import types
 
 from a2a.server.agent_execution import AgentExecutor, RequestContext
@@ -60,10 +61,12 @@ class ADKAgentExecutor(AgentExecutor):
         self._agent = get_agent(agent_name)
         if (memory_service is not None) and (not isinstance(memory_service, InMemoryMemoryService)):
             if self._agent.tools is None:
-                self._agent.tools = [LoadMemoryTool()]
+                self._agent.tools = [load_memory_tool, preload_memory_tool]
             else:
                 if not any(isinstance(tool, LoadMemoryTool) for tool in self._agent.tools):
-                    self._agent.tools.append(LoadMemoryTool())
+                    self._agent.tools.append(load_memory_tool)
+                if not any(isinstance(tool, PreloadMemoryTool) for tool in self._agent.tools):
+                    self._agent.tools.append(preload_memory_tool)
         self._runner = Runner(
             app_name=self._agent.name,
             agent=self._agent,

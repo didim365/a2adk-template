@@ -6,12 +6,12 @@ readme = "README.md"
 requires-python = ">=3.13"
 
 dependencies = [
-    "a2a-sdk",
+    "a2a-sdk>=0.2.5",
     "click>=8.1.8",
     "dotenv>=0.9.9",
     "httpx>=0.28.1",
     "google-genai>=1.9.0",
-    "google-adk>=0.0.3",
+    "google-adk>=1.1.1",
     "pydantic>=2.11.4",
     "python-dotenv>=1.1.0",
 ]
@@ -25,6 +25,3 @@ packages = ["."]
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[tool.uv.sources]
-a2a-sdk = { git = "https://github.com/google/a2a-python" }
