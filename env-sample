@@ -17,6 +17,7 @@ GCS_BUCKET=******
 # ADK Production
 # GCS_ARTIFACT_SERVICE=******
 # DATABASE_SESSION_SERVICE="postgresql://postgres:postgres@localhost:5432/postgres"
+# VERTEXAI_SESSION_SERVICE="{project}:{location}"
 # VERTEXAIRAG_MEMORY_SERVICE=projects/{project}/locations/{location}/ragCorpora/{rag_no}
 
 # Frontend

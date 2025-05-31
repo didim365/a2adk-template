@@ -54,7 +54,7 @@ memory_service=VertexAiRagMemoryService(rag_corpus="...", similarity_top_k=5, ve
 ```
 
 2. Using .env  
-Set the GCS_ARTIFACT_SERVICE, DATABASE_SESSION_SERVICE, and VERTEXAIRAG_MEMORY_SERVICE values in the .env file to use their respective environments. (The default is to use InMemory...())
+Set the GCS_ARTIFACT_SERVICE, DATABASE_SESSION_SERVICE, VERTEXAI_SESSION_SERVICE and VERTEXAIRAG_MEMORY_SERVICE values in the .env file to use their respective environments. (The default is to use InMemory...())
 
 ## A2A Environment Configuration
 To run A2A Server's Tasks for a long time, configure [task_store and queue_manager](https://google.github.io/A2A/sdk/python/#a2a.server.request_handlers.DefaultRequestHandler) in an environment capable of long-term storage. The default configuration in the sample is InMemory...(). Modify it according to your individual environment.

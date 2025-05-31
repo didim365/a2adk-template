@@ -10,6 +10,7 @@ from starlette.datastructures import State
 from google.adk.artifacts.gcs_artifact_service import GcsArtifactService
 from google.adk.memory.vertex_ai_rag_memory_service import VertexAiRagMemoryService
 from google.adk.sessions.database_session_service import DatabaseSessionService
+from google.adk.sessions.vertex_ai_session_service import VertexAiSessionService
 
 from a2a.server.apps import A2AStarletteApplication
 from a2a.server.events import InMemoryQueueManager
@@ -50,6 +51,12 @@ def main(host: str, port: int, agent: str):
         artifact_service = None
     if os.getenv('DATABASE_SESSION_SERVICE'):
         session_service = DatabaseSessionService(db_url=os.getenv('DATABASE_SESSION_SERVICE'))
+    elif os.getenv('VERTEXAI_SESSION_SERVICE'):
+        vertexai_value = os.getenv('VERTEXAI_SESSION_SERVICE').split(":")
+        if len(vertexai_value) == 2:
+            session_service = VertexAiSessionService(project=vertexai_value[0], location=vertexai_value[1])
+        else:
+            session_service = VertexAiSessionService(project=vertexai_value[0])
     else:
         session_service = None
     if os.getenv('VERTEXAIRAG_MEMORY_SERVICE'):
