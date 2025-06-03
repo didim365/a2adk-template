@@ -5,7 +5,7 @@ from starlette.exceptions import HTTPException
 
 from google.adk.sessions.base_session_service import BaseSessionService
 
-def list_sessions(request: Request):
+async def list_sessions(request: Request):
     """
     지정된 앱과 사용자에 대한 모든 세션의 목록을 반환합니다.
     """
@@ -16,13 +16,13 @@ def list_sessions(request: Request):
     app_name = request.path_params["app_name"]
     user_id = request.path_params["user_id"]
     
-    sessions_response = session_service.list_sessions(app_name=app_name, user_id=user_id)
+    sessions_response = await session_service.list_sessions(app_name=app_name, user_id=user_id)
     return Response(
         content=json.dumps(sessions_response.model_dump(mode='json')),
         media_type="application/json"
     )
 
-def get_session_messages(request: Request):
+async def get_session_messages(request: Request):
     """
     지정된 앱과 사용자에 대한 세션의 메시지를 반환합니다.
     """

@@ -1,7 +1,6 @@
 import logging
 import os
 from dotenv import load_dotenv
-import click
 import uvicorn
 from starlette.middleware.cors import CORSMiddleware
 from urllib.parse import urlparse
@@ -33,22 +32,22 @@ A2A_SERVER_URL = os.getenv("VITE_A2A_SERVER_URL")
 parsed_url = urlparse(A2A_SERVER_URL)
 DEFAULT_HOST = parsed_url.hostname if parsed_url.hostname else 'localhost'
 DEFAULT_PORT = parsed_url.port if parsed_url.port else 10008
+ROOT_AGENT_NAME = os.getenv("ROOT_AGENT_NAME") or "root_agent"
+UVICORN_WORKERS = int(os.getenv("UVICORN_WORKERS") or 4)
 
-@click.command()
-@click.option('--host', 'host', default=DEFAULT_HOST)
-@click.option('--port', 'port', default=DEFAULT_PORT)
-@click.option('--agent', 'agent', default='root_agent')
-def main(host: str, port: int, agent: str):
+def create_app(host: str = DEFAULT_HOST, port: int = DEFAULT_PORT, agent: str = ROOT_AGENT_NAME):
     # Verify an API key is set. Not required if using Vertex AI APIs, since those can use gcloud credentials.
     if not os.getenv('GOOGLE_GENAI_USE_VERTEXAI') == 'TRUE':
         if not os.getenv('GOOGLE_API_KEY'):
             raise Exception(
                 'GOOGLE_API_KEY environment variable not set and GOOGLE_GENAI_USE_VERTEXAI is not TRUE.'
             )
+        
     if os.getenv('GCS_ARTIFACT_SERVICE'):
         artifact_service = GcsArtifactService(bucket_name=os.getenv('GCS_ARTIFACT_SERVICE'))
     else:
         artifact_service = None
+
     if os.getenv('DATABASE_SESSION_SERVICE'):
         session_service = DatabaseSessionService(db_url=os.getenv('DATABASE_SESSION_SERVICE'))
     elif os.getenv('VERTEXAI_SESSION_SERVICE'):
@@ -59,6 +58,7 @@ def main(host: str, port: int, agent: str):
             session_service = VertexAiSessionService(project=vertexai_value[0])
     else:
         session_service = None
+        
     if os.getenv('VERTEXAIRAG_MEMORY_SERVICE'):
         memory_service = VertexAiRagMemoryService(rag_corpus=os.getenv('VERTEXAIRAG_MEMORY_SERVICE'))
     else:
@@ -88,26 +88,31 @@ def main(host: str, port: int, agent: str):
         routes = a2a_app_config.routes() # 빌더에서 기본 라우트 가져오기
         routes.extend(custom_routes)
         # 최종 Starlette 앱 빌드
-        app = a2a_app_config.build(routes=routes)
+        app_instance = a2a_app_config.build(routes=routes)
     else:
         # 최종 Starlette 앱 빌드
-        app = a2a_app_config.build()
+        app_instance = a2a_app_config.build()
     
     # State 객체 생성 및 설정
     app_state = State()
     app_state.session_service = agent_executor._runner.session_service
-    app.state = app_state # 빌드된 Starlette 앱에 state 할당
+    app_instance.state = app_state # 빌드된 Starlette 앱에 state 할당
 
     # CORS 미들웨어 추가 (최종 앱 인스턴스에)
-    app.add_middleware(
+    app_instance.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],  # 실제 운영 환경에서는 구체적인 도메인을 지정하세요
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    
-    uvicorn.run(app, host=host, port=port)
+    return app_instance
+
+def create_app_for_uvicorn():
+    return create_app()
+
+def main():
+    uvicorn.run("a2adk.__main__:create_app_for_uvicorn", host=DEFAULT_HOST, port=DEFAULT_PORT, workers=UVICORN_WORKERS, factory=True)
 
 if __name__ == '__main__':
     main()

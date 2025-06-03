@@ -12,7 +12,7 @@ GCS_BUCKET = os.getenv("GCS_BUCKET")
 if not GCS_BUCKET:
     raise RuntimeError("GCS_BUCKET 환경 변수가 설정되어 있지 않습니다.")
 
-def get_bucket_file(request: Request):
+async def get_bucket_file(request: Request):
     '''
     GCP Object Storage(GCS)에서 파일을 읽어 제공하는 엔드포인트
     example: http://localhost:9999/buckets/goog-10-k-2024.pdf#page=11

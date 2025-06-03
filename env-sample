@@ -1,24 +1,32 @@
-# Choose Model Backend: 0 -> ML Dev, 1 -> Vertex
+# === Select Model Backend ===
+# Choose the model backend to use. (0: ML Dev, 1: Vertex AI)
 GOOGLE_GENAI_USE_VERTEXAI=1
-
-# ML Dev backend config. Fill if using Ml Dev backend.
+# GOOGLE_GENAI_USE_VERTEXAI=0 으로 설정한 경우에만 필요합니다.
 GOOGLE_API_KEY=*******
-
-# Vertex backend config
+# GOOGLE_GENAI_USE_VERTEXAI=1 으로 설정한 경우에 필요합니다.
 GOOGLE_CLOUD_PROJECT=******
 GOOGLE_CLOUD_LOCATION=us-central1
 
-# Models used in Agents
+# === Agent Settings ===
+# Set the agent name and the model and version to use.
+ROOT_AGENT_NAME='root_agent'
 ROOT_AGENT_MODEL='gemini-2.0-flash'
 
-# Bucket name
+# === Google Cloud Storage Settings ===
+# GCS bucket name to be used for file uploads/downloads, etc.
 GCS_BUCKET=******
 
-# ADK Production
+# === ADK Production Environment Settings (Optional) ===
+# The settings below are examples that can be used in a production environment and are currently commented out.
+# If necessary, uncomment and set the values according to your actual environment.
 # GCS_ARTIFACT_SERVICE=******
 # DATABASE_SESSION_SERVICE="postgresql://postgres:postgres@localhost:5432/postgres"
-# VERTEXAI_SESSION_SERVICE="{project}:{location}"
 # VERTEXAIRAG_MEMORY_SERVICE=projects/{project}/locations/{location}/ragCorpora/{rag_no}
 
-# Frontend
+# === Uvicorn Server Settings ===
+# Number of Uvicorn worker processes.
+UVICORN_WORKERS=4
+
+# === Frontend Settings ===
+# URL for the frontend to access the A2A server.
 VITE_A2A_SERVER_URL=http://localhost:9999

@@ -4,7 +4,22 @@ from a2adk.routes.session import list_sessions, get_session_messages
 
 def get_routes():
     return [
-        Route("/buckets/{filepath:path}", get_bucket_file, methods=["GET"]),
-        Route("/apps/{app_name:path}/users/{user_id:path}/sessions/{session_id:path}/messages", get_session_messages, methods=["GET"]),
-        Route("/apps/{app_name:path}/users/{user_id:path}/sessions", list_sessions, methods=["GET"]),
+        Route(
+              "/buckets/{filepath:path}", 
+              get_bucket_file, 
+              methods=["GET"],
+              name='get_bucket_file'
+              ),
+        Route(
+              "/apps/{app_name:path}/users/{user_id:path}/sessions/{session_id:path}/messages", 
+              get_session_messages, 
+              methods=["GET"], 
+              name='get_session_messages'
+              ),
+        Route(
+              "/apps/{app_name:path}/users/{user_id:path}/sessions", 
+              list_sessions, 
+              methods=["GET"], 
+              name='list_sessions'
+              ),
     ]
