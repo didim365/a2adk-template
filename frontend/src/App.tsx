@@ -18,6 +18,10 @@ import type { Message, Session } from './client/schema';
 import reactLogo from './assets/react.svg';
 import './App.css';
 
+// 상수 정의
+const APP_NAME = 'weather_time_agent';
+const USER_ID = 'self';
+
 // Message에 id, timestamp를 추가한 타입
 interface MessageWithMeta extends Message {
   timestamp: string;
@@ -62,19 +66,16 @@ function App() {
         setSessions([]); // 에러 발생 시 빈 배열로 설정
       }
     };
-    fetchSessions('weather_time_agent', 'self');
+    fetchSessions(APP_NAME, USER_ID);
   }, []);
 
   // 선택된 세션의 채팅 내역을 불러오는 함수
   const fetchChatHistory = async (currentSessionId: string) => {
     if (!currentSessionId) return;
-    // TODO: appName, userId는 적절한 값을 사용해야 합니다.
-    const appName = 'weather_time_agent'; 
-    const userId = 'self';
 
     try {
       const baseUrl = import.meta.env.VITE_A2A_SERVER_URL.replace(/\/$/, '');
-      const response = await fetch(`${baseUrl}/apps/${appName}/users/${userId}/sessions/${currentSessionId}/messages`, {
+      const response = await fetch(`${baseUrl}/apps/${APP_NAME}/users/${USER_ID}/sessions/${currentSessionId}/messages`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -104,7 +105,13 @@ function App() {
     setInput('');
     // 서버에 메시지 전송
     try {
-      const result = await a2aClient.current.sendMessage(userMessage);
+      // Create a new message object with APP_NAME and USER_ID
+      const messageToSend = {
+        ...userMessage,
+        appName: APP_NAME,
+        userId: USER_ID,
+      };
+      const result = await a2aClient.current.sendMessage(messageToSend);
       // Task 타입 처리
       if (result && 'artifacts' in result && result.artifacts?.[0]?.parts?.[0] && 'text' in result.artifacts[0].parts[0]) {
         const agentMessage = createTextMessageObject(sessionId, 'agent', result.artifacts[0].parts[0].text);

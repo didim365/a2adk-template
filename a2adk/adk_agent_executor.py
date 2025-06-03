@@ -57,6 +57,7 @@ class ADKAgentExecutor(AgentExecutor):
     ):
         self._agent = get_agent(agent_name)
 
+        self._use_artifacts = artifact_service is not None
         self._use_memory = memory_service is not None
         if self._use_memory:
             if self._agent.tools is None:
@@ -75,8 +76,6 @@ class ADKAgentExecutor(AgentExecutor):
             memory_service=memory_service if memory_service else InMemoryMemoryService(),
         )
 
-        self._save_as_artifacts = (artifact_service is not None) and (not isinstance(artifact_service, InMemoryArtifactService))
-
     def _run_agent(
         self,
         session_id,
@@ -87,7 +86,7 @@ class ADKAgentExecutor(AgentExecutor):
             session_id=session_id,
             user_id='self',
             new_message=new_message,
-            run_config=A2ARunConfig(current_task_updater=task_updater, save_input_blobs_as_artifacts=self._save_as_artifacts),
+            run_config=A2ARunConfig(current_task_updater=task_updater, save_input_blobs_as_artifacts=self._use_artifacts),
         )
 
     def _get_task_updater(self, tool_context: ToolContext):

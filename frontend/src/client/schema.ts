@@ -1045,5 +1045,33 @@ export interface Session {
   app_name: string;
   user_id: string;
   last_update_time: number;
+  state?: Record<string, unknown> | null;
+  events?: Event[] | null;
+}
+
+// === ADK Specific Extension for Frontend ===
+
+export interface EventContent {
+  parts?: Part[] | null;
+  role?: "user" | "agent" | string | null;
+}
+
+export interface Event {
+  id: string;
+  timestamp: number;
+  content?: EventContent | null;
+  grounding_metadata?: unknown | null;
+  partial?: unknown | null;
+  turn_complete?: unknown | null;
+  error_code?: unknown | null;
+  error_message?: unknown | null;
+  interrupted?: unknown | null;
+  custom_metadata?: Record<string, unknown> | null;
+  usage_metadata?: unknown | null;
+  invocation_id?: string | null;
+  author?: "user" | "agent" | string | null;
+  actions?: Record<string, unknown> | null;
+  long_running_tool_ids?: string[] | null;
+  branch?: unknown | null;
 }
 

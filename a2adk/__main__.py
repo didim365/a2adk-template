@@ -10,6 +10,7 @@ from google.adk.artifacts.gcs_artifact_service import GcsArtifactService
 from google.adk.memory.vertex_ai_rag_memory_service import VertexAiRagMemoryService
 from google.adk.sessions.database_session_service import DatabaseSessionService
 from google.adk.sessions.vertex_ai_session_service import VertexAiSessionService
+from google.adk.sessions.in_memory_session_service import InMemorySessionService
 
 from a2a.server.apps import A2AStarletteApplication
 from a2a.server.events import InMemoryQueueManager
@@ -25,7 +26,6 @@ logging.basicConfig()
 from a2adk.adk_agent_executor import ADKAgentExecutor
 from a2adk.agents.card import get_agent_card
 from a2adk.routes import get_routes
-
 
 A2A_SERVER_URL = os.getenv("VITE_A2A_SERVER_URL")
 # A2A_SERVER_URL에서 호스트와 포트 추출
